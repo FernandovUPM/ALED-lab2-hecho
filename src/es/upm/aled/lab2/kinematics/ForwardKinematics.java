@@ -38,24 +38,22 @@ public class ForwardKinematics {
 
 	// Private helper method that implements the recursive algorithm
 	private static Node computePositions(Segment link, double baseX, double baseY, double accumulatedAngle) {
+		double x = 0;
+		double y = 0;
+		accumulatedAngle += link.getAngle(); 
 		
-		accumulatedAngle += link.getAngle();
-		double X = 0.0;
-		double Y = 0.0;
+		x = baseX + link.getLength()*Math.cos(accumulatedAngle);
+		y = baseY + link.getLength()*Math.sin(accumulatedAngle);
+		Node nodoActual = new Node(x,y);
 		
-		X = baseX + link.getLength()*Math.cos(accumulatedAngle);
-		Y = baseY + link.getLength()*Math.sin(accumulatedAngle);
 		
-		Node nodoActual = new Node(X,Y);
-		
-		if(link.getChildren().size()== 0) {
+		if (link.getChildren().isEmpty()) {
 			return nodoActual;
 		}
-		
-		for(Segment s : link.getChildren()) {
-			Node childNode = computePositions(s, X, Y, accumulatedAngle);
-			nodoActual.addChild(childNode);
+		for(Segment s: link.getChildren()) {
+			Node nodoHijo = computePositions(s, x, y, accumulatedAngle);
+			nodoActual.addChild(nodoHijo);
 		}
 		return nodoActual;
-	}
-}
+	}	
+}	
